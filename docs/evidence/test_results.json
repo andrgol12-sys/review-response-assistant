@@ -1,0 +1,42 @@
+{
+  "mode": "LOCAL_TEMPLATE_MOCK_NO_LLM",
+  "telegram": "disabled; not tested",
+  "repeat_poll": "PASS",
+  "state_reload": "PASS",
+  "state_guard": "PASS",
+  "cases": [
+    {
+      "id": 1,
+      "review": "Отлично, спасибо! Товар понравился, доставка быстро.",
+      "expected": "positive",
+      "actual": "positive",
+      "status": "processed",
+      "reply": "Спасибо за ваш отзыв и добрые слова. Нам очень приятно, что у вас остались положительные впечатления.",
+      "reply_count": 1,
+      "mode": "LOCAL_TEMPLATE_MOCK_NO_LLM",
+      "result": "PASS"
+    },
+    {
+      "id": 2,
+      "review": "Ужас, товар не работает, я недоволен.",
+      "expected": "negative",
+      "actual": "negative",
+      "status": "processed",
+      "reply": "Нам жаль, что у вас остались негативные впечатления. Спасибо, что сообщили об этом. Пожалуйста, свяжитесь с нашей поддержкой, и мы постараемся помочь как можно быстрее.",
+      "reply_count": 1,
+      "mode": "LOCAL_TEMPLATE_MOCK_NO_LLM",
+      "result": "PASS"
+    },
+    {
+      "id": 3,
+      "review": "Заказ получен во вторник. Упаковка серая.",
+      "expected": "neutral",
+      "actual": "neutral",
+      "status": "processed",
+      "reply": "Спасибо за ваш отзыв. Мы внимательно его изучили и учтем ваши замечания. Если захотите, можете поделиться деталями, чтобы мы смогли отреагировать точнее.",
+      "reply_count": 1,
+      "mode": "LOCAL_TEMPLATE_MOCK_NO_LLM",
+      "result": "PASS"
+    }
+  ]
+}

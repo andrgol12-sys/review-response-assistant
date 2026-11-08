@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отзывы</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f5f7;
+      --card: #ffffff;
+      --text: #17202a;
+      --muted: #5c6b7a;
+      --border: #d7dde4;
+      --accent: #1f6feb;
+      --accent-hover: #1558b0;
+      --success: #1a7f37;
+      --pending: #9a6700;
+      --error: #b42318;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #eef3f8 0%, #f8fafc 100%);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    .hero, .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 38px);
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    input, textarea, button {
+      font: inherit;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      outline: 2px solid rgba(31, 111, 235, 0.15);
+      border-color: var(--accent);
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    button:hover { background: var(--accent-hover); }
+    button:disabled { opacity: 0.7; cursor: wait; }
+
+    .message {
+      min-height: 20px;
+      font-size: 14px;
+    }
+
+    .message.error { color: var(--error); }
+    .message.success { color: var(--success); }
+
+    .reviews {
+      display: grid;
+      gap: 14px;
+    }
+
+    .review-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .review-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge.new {
+      color: var(--pending);
+      background: rgba(154, 103, 0, 0.12);
+    }
+
+    .badge.processed {
+      color: var(--success);
+      background: rgba(26, 127, 55, 0.12);
+    }
+
+    .badge.positive {
+      color: #0f6b3f;
+      background: rgba(15, 107, 63, 0.12);
+    }
+
+    .badge.negative {
+      color: #b42318;
+      background: rgba(180, 35, 24, 0.12);
+    }
+
+    .badge.neutral {
+      color: #1f4b99;
+      background: rgba(31, 75, 153, 0.12);
+    }
+
+    .review-text {
+      margin: 0 0 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .response-box {
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .review-children {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+      padding-left: 18px;
+      border-left: 2px solid rgba(31, 111, 235, 0.12);
+    }
+
+    .reply-form {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .reply-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 180px) 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .reply-grid textarea {
+      min-height: 84px;
+    }
+
+    .reply-form button {
+      align-self: stretch;
+      min-width: 120px;
+    }
+
+    .reply-message {
+      min-height: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .reply-message.error { color: var(--error); }
+    .reply-message.success { color: var(--success); }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 28px 12px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        width: min(100% - 20px, 960px);
+        padding-top: 20px;
+      }
+
+      .reply-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>Форма отзывов</h1>
+      <p class="subtitle">
+        Оставьте отзыв, а система сохранит его и автоматически подготовит ответ. Список обновляется без перезагрузки страницы.
+      </p>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <form id="review-form">
+          <label>
+            Имя (необязательно)
+            <input type="text" id="name" name="name" maxlength="255" placeholder="Например, Анна">
+          </label>
+
+          <label>
+            Отзыв
+            <textarea id="text" name="text" required maxlength="5000" placeholder="Напишите ваш отзыв"></textarea>
+          </label>
+
+          <button id="submit-button" type="submit">Отправить</button>
+          <div id="form-message" class="message" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div id="reviews" class="reviews"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const reviewsContainer = document.getElementById("reviews");
+    const reviewForm = document.getElementById("review-form");
+    const formMessage = document.getElementById("form-message");
+    const submitButton = document.getElementById("submit-button");
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(value) {
+      return new Date(value).toLocaleString("ru-RU");
+    }
+
+    function statusLabel(status) {
+      return status === "processed" ? "обработан" : "новый";
+    }
+
+    function toneLabel(tone) {
+      if (tone === "positive") return "положительный";
+      if (tone === "negative") return "отрицательный";
+      if (tone === "neutral") return "нейтральный";
+      return "";
+    }
+
+    function buildReviewTree(reviews) {
+      const nodes = new Map(
+        reviews.map((review) => [review.id, { ...review, children: [] }])
+      );
+      const roots = [];
+
+      for (const node of nodes.values()) {
+        if (node.parent_id && nodes.has(node.parent_id)) {
+          nodes.get(node.parent_id).children.push(node);
+        } else {
+          roots.push(node);
+        }
+      }
+
+      return roots;
+    }
+
+    function renderReview(review) {
+      const childrenHtml = review.children.map(renderReview).join("");
+
+      return `
+        <article class="review-item">
+          <div class="review-meta">
+            <span><strong>${escapeHtml(review.name || "Аноним")}</strong></span>
+            <span>${formatDate(review.created_at)}</span>
+            <span class="badge ${escapeHtml(review.status)}">${statusLabel(review.status)}</span>
+            ${review.tone ? `<span class="badge ${escapeHtml(review.tone)}">${toneLabel(review.tone)}</span>` : ""}
+          </div>
+          <p class="review-text">${escapeHtml(review.text)}</p>
+          ${review.response ? `<div class="response-box"><strong>Ответ системы:</strong><br>${escapeHtml(review.response)}</div>` : ""}
+          <form class="reply-form" data-parent-id="${review.id}">
+            <div class="reply-grid">
+              <input type="text" name="name" maxlength="255" placeholder="Ваше имя">
+              <textarea name="text" required maxlength="5000" placeholder="Напишите комментарий к этому комментарию"></textarea>
+              <button type="submit">Ответить</button>
+            </div>
+            <div class="reply-message" aria-live="polite"></div>
+          </form>
+          ${childrenHtml ? `<div class="review-children">${childrenHtml}</div>` : ""}
+        </article>
+      `;
+    }
+
+    function renderReviews(reviews) {
+      if (!reviews.length) {
+        reviewsContainer.innerHTML = '<div class="empty">Пока нет отзывов.</div>';
+        return;
+      }
+
+      const reviewTree = buildReviewTree(reviews);
+      reviewsContainer.innerHTML = reviewTree.map(renderReview).join("");
+    }
+
+    async function loadReviews() {
+      try {
+        const response = await fetch("/api/reviews");
+        if (!response.ok) {
+          throw new Error("Не удалось загрузить отзывы.");
+        }
+
+        const reviews = await response.json();
+        renderReviews(reviews);
+      } catch (error) {
+        reviewsContainer.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    reviewsContainer.addEventListener("submit", async (event) => {
+      const replyForm = event.target.closest(".reply-form");
+      if (!replyForm) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const message = replyForm.querySelector(".reply-message");
+      const submitButton = replyForm.querySelector('button[type="submit"]');
+      const nameInput = replyForm.querySelector('input[name="name"]');
+      const textInput = replyForm.querySelector('textarea[name="text"]');
+      const parentId = Number(replyForm.dataset.parentId);
+
+      message.textContent = "";
+      message.className = "reply-message";
+
+      if (!textInput.value.trim()) {
+        message.textContent = "Введите текст комментария.";
+        message.classList.add("error");
+        return;
+      }
+
+      submitButton.disabled = true;
+
+      try {
+        const response = await fetch("/api/reviews", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            parent_id: parentId,
+            name: nameInput.value,
+            text: textInput.value
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          const detail = errorData.detail || "Не удалось сохранить комментарий.";
+          throw new Error(typeof detail === "string" ? detail : "Не удалось сохранить комментарий.");
+        }
+
+        replyForm.reset();
+        message.textContent = "Комментарий добавлен.";
+        message.classList.add("success");
+        await loadReviews();
+      } catch (error) {
+        message.textContent = error.message;
+        message.classList.add("error");
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    reviewForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      formMessage.textContent = "";
+      formMessage.className = "message";
+
+      const payload = {
+        name: document.getElementById("name").value,
+        text: document.getElementById("text").value
+      };
+
+      if (!payload.text.trim()) {
+        formMessage.textContent = "Введите текст отзыва.";
+        formMessage.classList.add("error");
+        return;
+      }
+
+      submitButton.disabled = true;
+
+      try {
+        const response = await fetch("/api/reviews", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          const detail = errorData.detail || "Не удалось сохранить отзыв.";
+          throw new Error(typeof detail === "string" ? detail : "Не удалось сохранить отзыв.");
+        }
+
+        reviewForm.reset();
+        formMessage.textContent = "Отзыв сохранен.";
+        formMessage.classList.add("success");
+        await loadReviews();
+      } catch (error) {
+        formMessage.textContent = error.message;
+        formMessage.classList.add("error");
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    loadReviews();
+    setInterval(loadReviews, 5000);
+  </script>
+</body>
+</html>

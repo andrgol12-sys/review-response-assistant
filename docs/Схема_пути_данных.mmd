@@ -1,0 +1,15 @@
+flowchart TD
+    A[templates/index.html: форма отзыва] --> B[api/routes.py: POST /api/reviews]
+    B --> C[models/review.py + db/session.py: база, status new]
+    C --> D[client.py: GET /api/reviews, фильтр new]
+    D --> E[worker.py: координация]
+    E --> F[processor.py: detect_tone, маркеры]
+    F --> G[telegram_bot.py: попытка уведомления при наличии настроек]
+    G --> H[state.py: проверка processed]
+    H --> I[processor.py: generate_response]
+    I --> J[Без ключа: локальный шаблонный mock]
+    I --> K[С ключом: OpenAI API, в этом тесте не вызывался]
+    J --> L[client.py: POST дочернего ответа]
+    K --> L
+    L --> M[client.py: PATCH тональности и статусов processed]
+    M --> N[state.py: сохранение ID в JSON]

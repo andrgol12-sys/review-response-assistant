@@ -1,0 +1,62 @@
+[
+  {
+    "id": 6,
+    "parent_id": 1,
+    "name": "AI Support",
+    "text": "Спасибо за ваш отзыв и добрые слова. Нам очень приятно, что у вас остались положительные впечатления.",
+    "status": "processed",
+    "response": null,
+    "tone": "neutral",
+    "created_at": "2026-11-08T18:35:27"
+  },
+  {
+    "id": 5,
+    "parent_id": 2,
+    "name": "AI Support",
+    "text": "Нам жаль, что у вас остались негативные впечатления. Спасибо, что сообщили об этом. Пожалуйста, свяжитесь с нашей поддержкой, и мы постараемся помочь как можно быстрее.",
+    "status": "processed",
+    "response": null,
+    "tone": "neutral",
+    "created_at": "2026-11-08T18:35:27"
+  },
+  {
+    "id": 4,
+    "parent_id": 3,
+    "name": "AI Support",
+    "text": "Спасибо за ваш отзыв. Мы внимательно его изучили и учтем ваши замечания. Если захотите, можете поделиться деталями, чтобы мы смогли отреагировать точнее.",
+    "status": "processed",
+    "response": null,
+    "tone": "neutral",
+    "created_at": "2026-11-08T18:35:26"
+  },
+  {
+    "id": 3,
+    "parent_id": null,
+    "name": "Ольга",
+    "text": "Заказ получен во вторник. Упаковка серая.",
+    "status": "processed",
+    "response": null,
+    "tone": "neutral",
+    "created_at": "2026-11-08T18:35:25"
+  },
+  {
+    "id": 2,
+    "parent_id": null,
+    "name": "Иван",
+    "text": "Ужас, товар не работает, я недоволен.",
+    "status": "processed",
+    "response": null,
+    "tone": "negative",
+    "created_at": "2026-11-08T18:35:25"
+  },
+  {
+    "id": 1,
+    "parent_id": null,
+    "name": "Анна",
+    "text": "Отлично, спасибо! Товар понравился, доставка быстро.",
+    "status": "processed",
+    "response": null,
+    "tone": "positive",
+    "created_at": "2026-11-08T18:35:25"
+  }
+]
